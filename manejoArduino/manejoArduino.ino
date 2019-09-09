@@ -68,12 +68,14 @@
   interface.
  ****************************************************/
 
+/****************************************** Incluyo las librerias ******************************************/
 #include <Wire.h>
 #include "Adafruit_PWMServoDriver.h"
 
-// called this way, it uses the default address 0x40
+/****************************************** Declaro e inicializo el PWM ******************************************/
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
+/****************************************** Defino constantes ******************************************/
 #define INCR 5     // "angle-step", from current angle to the destination angle
 #define INCRDEL 20 // "time-step", ms delay for each angle-step
 
@@ -95,6 +97,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 #define NUMOFANGLES 15
 
+/****************************************** Defino variables ******************************************/
 // Depending on your servo make, the pulse width min and max may vary, you
 // want these to be as small/large as possible without hitting the hard stop
 // for max range. You'll have to tweak them as necessary to match the servos you
@@ -104,7 +107,7 @@ int servomin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  14
 int servomax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640 };
 int anguloMin[] = {25,  65,   5,    5,    5,    15,   90,   60,   85,   5,    75,   50,   85,   70,   35  };
 int anguloMax[] = {145, 175,  150,  80,   110,  160,  165,  75,   100,  75,   145,  75,   110,  120,  85  };
-int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60  }
+int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60  };
 //                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14
 
 
@@ -118,7 +121,7 @@ int i, readVal[NUMOFANGLES] = {};
 int funcionPE;
 int modo;
 
-/***********************************************************************/
+/****************************************** SETUP ******************************************/
 void setup()
 {
   Serial.begin(9600);
@@ -139,7 +142,7 @@ void setup()
 
 }
 
-/***********************************************************************/
+/****************************************** LOOP ******************************************/
 void loop()
 {
   //readnumbers();
@@ -178,7 +181,7 @@ void loop()
   }
 }
 
-/***********************************************************************/
+/****************************************** readNumbers ******************************************/
 void readnumbers()
 {
   int servo, angle;
@@ -200,13 +203,12 @@ void readnumbers()
       readVal[servo] = angle;
   }
 }
-/***********************************************************************/
 
-/***********************************************************************/
+/****************************************** setAngle ******************************************/
 void setAngle(int servonum, int angle)
 {
   int i, pulselen;
-  if ((angle >= 5) && (angle <= 175))
+  if ((angle >= anguloMin[servonum]) && (angle <= anguloMax[servonum]))
   {
     int initV, endV, incV;
     if (lastVal[servonum] > angle)
@@ -226,6 +228,7 @@ void setAngle(int servonum, int angle)
   }
 }
 
+/****************************************** readMonitorSerie ******************************************/
 int readMonitorSerie()
 {
   int modoF;
@@ -252,6 +255,8 @@ int readMonitorSerie()
   return modoF;
 }
 
+/****************************************** Defino las funciones del robot ******************************************/
+/****************************************** saludar ******************************************/
 void saludar()
 {
   readVal[RSHLDRA] = 30;
@@ -291,6 +296,7 @@ void saludar()
   delay(500);
 }
 
+/****************************************** no ******************************************/
 void no()
 {
   readVal[RSHLDRA] = 30;
@@ -343,80 +349,81 @@ void no()
  
 }
 
+/****************************************** estabilizar ******************************************/
 void estabilizar()
 {
   // Head to front
-  lastVal[HEAD] = 85;
+  lastVal[HEAD] = posHome[HEAD];
   setAngle(HEAD, lastVal[HEAD]);
   delay(500);
 
   // Right arm parallel to torso - elbow 75
-  lastVal[RELBOW] = 75;
+  lastVal[RELBOW] = posHome[RELBOW];
   setAngle(RELBOW, lastVal[RELBOW]);
   delay(500);
 
   // Right arm parallel to torso - shoulder/arm 5
-  lastVal[RSHLDRA] = 5;
+  lastVal[RSHLDRA] =  posHome[RSHLDRA];
   setAngle(RSHLDRA, lastVal[RSHLDRA]);
   delay(500);
 
   // Right arm parallel to torso - shoulder/torso 70
-  lastVal[RSHLDRT] = 70;
+  lastVal[RSHLDRT] =  posHome[RSHLDRT];
   setAngle(RSHLDRT, lastVal[RSHLDRT]);
   delay(500);
 
   // Left arm parallel to torso - shouder/arm 85
-  lastVal[LELBOW] = 85;
+  lastVal[LELBOW] =  posHome[LELBOW];
   setAngle(LELBOW, lastVal[LELBOW]);
   delay(500);
 
   // Left arm parallel to torso - shouder/arm 160
-  lastVal[LSHLDRA] = 160;
+  lastVal[LSHLDRA] =  posHome[LSHLDRA];
   setAngle(LSHLDRA, lastVal[LSHLDRA]);
   delay(500);
 
   // Left arm parallel to torso - shouder/torso 90
-  lastVal[LSHLDRT] = 90;
+  lastVal[LSHLDRT] =  posHome[LSHLDRT];
   setAngle(LSHLDRT, lastVal[LSHLDRT]);
   delay(500);
 
   // Right leg - standing position 75
-  lastVal[RHIP] = 75;
+  lastVal[RHIP] =  posHome[RHIP];
   setAngle(RHIP, lastVal[RHIP]);
   delay(500);
 
   // Left leg - standing position 85
-  lastVal[LHIP] = 85;
+  lastVal[LHIP] =  posHome[LHIP];
   setAngle(LHIP, lastVal[LHIP]);
   delay(500);
 
   // Right leg - standing position 45
-  lastVal[RTHIGH] = 45;
+  lastVal[RTHIGH] =  posHome[RTHIGH];
   setAngle(RTHIGH, lastVal[RTHIGH]);
   delay(500);
 
   // Left leg - standing position 110
-  lastVal[LTHIGH] = 110;
+  lastVal[LTHIGH] =  posHome[LTHIGH];
   setAngle(LTHIGH, lastVal[LTHIGH]);
   delay(500);
 
   // Right leg - standing position 75
-  lastVal[RKNEE] = 75;
+  lastVal[RKNEE] =  posHome[RKNEE];
   setAngle(RKNEE, lastVal[RKNEE]);
   delay(500);
 
   // Left leg - standing position 85
-  lastVal[LKNEE] = 85;
+  lastVal[LKNEE] =  posHome[LKNEE];
   setAngle(LKNEE, lastVal[LKNEE]);
   delay(500);
 
   // Right leg - standing position 95
-  lastVal[RANKLE] = 95;
+  lastVal[RANKLE] =  posHome[RANKLE];
   setAngle(RANKLE, lastVal[RANKLE]);
   delay(500);
 
   // Left leg - standing position 95
-  lastVal[LANKLE] = 60;
+  lastVal[LANKLE] =  posHome[LANKLE];
   setAngle(LANKLE, lastVal[LANKLE]);
   delay(500);
 }
