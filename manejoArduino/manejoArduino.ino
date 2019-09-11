@@ -132,7 +132,8 @@ void setup()
   Serial.println("2 FUNCION");
   Serial.println("  1 - Saludar");
   Serial.println("  2 - Decir que no");
-  Serial.println("  3 - Estabilizar");
+  Serial.println("  3 - Dar la mano");
+  Serial.println("  4 - Estabilizar");
 
   pwm.begin();
   pwm.setPWMFreq(60); // Analog servos run at ~60 Hz updates
@@ -174,6 +175,11 @@ void loop()
       no();
     }
     if ( funcionPE == 3)
+    {
+      Serial.println("Bhasky da la mano");
+      darLaMano();
+    }
+    if ( funcionPE == 4)
     {
       Serial.println("Bhasky se estabiliza");
       estabilizar();
@@ -259,47 +265,47 @@ int readMonitorSerie()
 /****************************************** saludar ******************************************/
 void saludar()
 {
-  readVal[RSHLDRA] = 30;
+  readVal[RSHLDRA] = 35;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(500);
+  delay(250);
   
   readVal[RELBOW] = 5;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(500);
+  delay(250);
 
   readVal[LSHLDRA] = 25;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(500);
+  delay(250);
 
   readVal[HEAD] = 30;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(250);
     
   readVal[HEAD] = 130;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(250);
     
-  readVal[HEAD] = 90;
+  readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(250);
     
   readVal[LSHLDRA] = 160;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(500);
+  delay(250);
     
   readVal[RELBOW] = 65;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(500);
+  delay(250);
  
   readVal[RSHLDRA] = 5;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(500);
+  delay(250);
 }
 
 /****************************************** no ******************************************/
 void no()
 {
-  readVal[RSHLDRA] = 30;
+  readVal[RSHLDRA] = 35;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
   delay(500);
   
@@ -315,7 +321,7 @@ void no()
   setAngle(LELBOW, readVal[LELBOW]);
   delay(500);
   
-  readVal[HEAD] = 90;
+  readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
   delay(500);
 
@@ -327,7 +333,7 @@ void no()
   setAngle(HEAD, readVal[HEAD]);
   delay(500);
 
-  readVal[HEAD] = 90;
+  readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
   delay(500);
 
@@ -348,7 +354,34 @@ void no()
   delay(500);
  
 }
+/****************************************** darLaMano ******************************************/
+void darLaMano(){
+  
+  readVal[RSHLDRT] = 150;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
 
+  readVal[RSHLDRT] = 130;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
+
+  readVal[RSHLDRT] = 150;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
+
+  readVal[RSHLDRT] = 130;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
+
+  readVal[RSHLDRT] = 150;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
+
+  readVal[RSHLDRT] = 75;
+  setAngle(RSHLDRT, readVal[RSHLDRT]);
+  delay(250);
+  
+}
 /****************************************** estabilizar ******************************************/
 void estabilizar()
 {
