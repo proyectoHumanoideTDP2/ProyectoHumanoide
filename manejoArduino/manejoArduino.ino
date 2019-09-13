@@ -78,6 +78,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 /****************************************** Defino constantes ******************************************/
 #define INCR 5     // "angle-step", from current angle to the destination angle
 #define INCRDEL 20 // "time-step", ms delay for each angle-step
+#define DELAY_ENTRE_SERVOS 250 
 
 #define HEAD 0
 #define RSHLDRT 1 // Right shoulder articulation with torso
@@ -214,6 +215,7 @@ void readnumbers()
 void setAngle(int servonum, int angle)
 {
   int i, pulselen;
+  int speed = 2;
   if ((angle >= anguloMin[servonum]) && (angle <= anguloMax[servonum]))
   {
     int initV, endV, incV;
@@ -228,8 +230,8 @@ void setAngle(int servonum, int angle)
       pwm.setPWM(servonum, 0, pulselen);
       delay(INCRDEL);
       if (i != angle)
-        i += incV;
-    } while (i != angle);
+        i += incV*speed;
+    } while ((incV == 1 && i < angle ) || ((incV == -1 && i > angle )));
     lastVal[servonum] = angle;
   }
 }
@@ -267,39 +269,39 @@ void saludar()
 {
   readVal[RSHLDRA] = 35;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
   
   readVal[RELBOW] = 5;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[LSHLDRA] = 25;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[HEAD] = 30;
   setAngle(HEAD, readVal[HEAD]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
     
   readVal[HEAD] = 130;
   setAngle(HEAD, readVal[HEAD]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
     
   readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
     
   readVal[LSHLDRA] = 160;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
     
   readVal[RELBOW] = 65;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
  
   readVal[RSHLDRA] = 5;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 }
 
 /****************************************** no ******************************************/
@@ -307,51 +309,51 @@ void no()
 {
   readVal[RSHLDRA] = 35;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
   
   readVal[RELBOW] = 5;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[LSHLDRA] = 135;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
   
   readVal[LELBOW] = 150;
   setAngle(LELBOW, readVal[LELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
   
   readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[HEAD] = 30;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[HEAD] = 140;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[HEAD] = 85;
   setAngle(HEAD, readVal[HEAD]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RELBOW] = 65;
   setAngle(RELBOW, readVal[RELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
  
   readVal[RSHLDRA] = 5;
   setAngle(RSHLDRA, readVal[RSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[LELBOW] = 90;
   setAngle(LELBOW, readVal[LELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
   
   readVal[LSHLDRA] = 160;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
  
 }
 /****************************************** darLaMano ******************************************/
@@ -359,27 +361,27 @@ void darLaMano(){
   
   readVal[RSHLDRT] = 150;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RSHLDRT] = 130;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RSHLDRT] = 150;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RSHLDRT] = 130;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RSHLDRT] = 150;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
 
   readVal[RSHLDRT] = 75;
   setAngle(RSHLDRT, readVal[RSHLDRT]);
-  delay(250);
+  delay(DELAY_ENTRE_SERVOS);
   
 }
 /****************************************** estabilizar ******************************************/
@@ -388,75 +390,76 @@ void estabilizar()
   // Head to front
   lastVal[HEAD] = posHome[HEAD];
   setAngle(HEAD, lastVal[HEAD]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right arm parallel to torso - elbow 75
   lastVal[RELBOW] = posHome[RELBOW];
   setAngle(RELBOW, lastVal[RELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right arm parallel to torso - shoulder/arm 5
   lastVal[RSHLDRA] =  posHome[RSHLDRA];
   setAngle(RSHLDRA, lastVal[RSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right arm parallel to torso - shoulder/torso 70
   lastVal[RSHLDRT] =  posHome[RSHLDRT];
   setAngle(RSHLDRT, lastVal[RSHLDRT]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left arm parallel to torso - shouder/arm 85
   lastVal[LELBOW] =  posHome[LELBOW];
   setAngle(LELBOW, lastVal[LELBOW]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left arm parallel to torso - shouder/arm 160
   lastVal[LSHLDRA] =  posHome[LSHLDRA];
   setAngle(LSHLDRA, lastVal[LSHLDRA]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left arm parallel to torso - shouder/torso 90
   lastVal[LSHLDRT] =  posHome[LSHLDRT];
   setAngle(LSHLDRT, lastVal[LSHLDRT]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right leg - standing position 75
   lastVal[RHIP] =  posHome[RHIP];
   setAngle(RHIP, lastVal[RHIP]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left leg - standing position 85
   lastVal[LHIP] =  posHome[LHIP];
   setAngle(LHIP, lastVal[LHIP]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right leg - standing position 45
   lastVal[RTHIGH] =  posHome[RTHIGH];
   setAngle(RTHIGH, lastVal[RTHIGH]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left leg - standing position 110
   lastVal[LTHIGH] =  posHome[LTHIGH];
   setAngle(LTHIGH, lastVal[LTHIGH]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right leg - standing position 75
   lastVal[RKNEE] =  posHome[RKNEE];
   setAngle(RKNEE, lastVal[RKNEE]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left leg - standing position 85
   lastVal[LKNEE] =  posHome[LKNEE];
   setAngle(LKNEE, lastVal[LKNEE]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Right leg - standing position 95
   lastVal[RANKLE] =  posHome[RANKLE];
   setAngle(RANKLE, lastVal[RANKLE]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 
   // Left leg - standing position 95
   lastVal[LANKLE] =  posHome[LANKLE];
   setAngle(LANKLE, lastVal[LANKLE]);
-  delay(500);
+  delay(DELAY_ENTRE_SERVOS);
 }
+

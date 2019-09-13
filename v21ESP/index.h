@@ -21,7 +21,7 @@ const char MAIN_page[] PROGMEM = R"=====(
       <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="1" method="get">Saludar</button> 
       <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="2" method="get">No</button> 
       <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="3" method="get">Dar la mano</button> 
-      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="4" method="get">Estabilziar</button> 
+      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="4" method="get">Estabilizar</button> 
     </form>
 </CENTER>
 
