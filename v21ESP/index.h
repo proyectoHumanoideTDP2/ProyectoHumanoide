@@ -17,11 +17,15 @@ const char MAIN_page[] PROGMEM = R"=====(
       <input style="height:20%;width:40%;font-size:70px" type="submit" value="Enviar">
       </font>
     </form>
-    <input style="height:20%;width:40%;font-size:70px" type="submit" value="Saludar" method="get" action="saludar1" id="saludar2" name="saludar3"> 
+    <form action="" method="get">
+      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="1" method="get">Saludar</button> 
+      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="2" method="get">No</button> 
+      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="3" method="get">Dar la mano</button> 
+      <button style="height:20%;width:40%;font-size:70px" type="submit" name="funcion" value="4" method="get">Estabilziar</button> 
+    </form>
 </CENTER>
 
 </body>
 </html>
 
 )=====";
-
