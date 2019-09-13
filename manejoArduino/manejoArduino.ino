@@ -463,37 +463,53 @@ void estabilizar()
   setAngle(LANKLE, lastVal[LANKLE]);
   delay(DELAY_ENTRE_SERVOS);
 }
-
-
-void setAngleParallel(int servosnum[], int angles[],int N)
-{
-  int i, pulselen;
-  int speed = 2;
-  if(isAngleValid(servosnum,angles,N))
-  {
-    int initV, endV, incV;
-    if (lastVal[servonum] > angle)
-      incV = -1;
-    else
-      incV = 1;
-    i = lastVal[servonum];
-    do
-    {
-      pulselen = map(i, 0, 180, servomin[servonum], servomax[servonum]);
-      pwm.setPWM(servonum, 0, pulselen);
-      delay(INCRDEL);
-      if (i != angle)
-        i += incV*speed;
-    } while ((incV == 1 && i < angle ) || ((incV == -1 && i > angle )));
-    lastVal[servonum] = angle;
-  }
-}
-
 boolean isAngleValid(int servosnum[],int angles[],int N){
   for(int i=0;i++;i<N){
-     if ((angles[i] <= anguloMin[servosnum[i]]) && (angles[i] >= anguloMax[servosnum[i]])){
+     if ((angles[i] < anguloMin[servosnum[i]]) && (angles[i] > anguloMax[servosnum[i]])){
        return false;
      }
   }
   return true;
+}
+
+void setAngleParallel(int servosnum[], int angles[],int N)
+{
+  int i, pulselen;
+  int j=0;
+  int cantComplet=0;
+  int speed = 2;
+  boolean notFinish = true;
+
+  if(isAngleValid(servosnum,angles,N))
+  {
+    while(notFinish){
+      if (servosnum[j] != -1 || j==N){
+        int initV, endV, incV;
+        if (lastVal[servosnum[j]] > angles[j])
+          incV = -1;
+        else
+          incV = 1;
+        i = lastVal[servosnum[j]];
+        if ((incV == 1 && i < angles[j] ) || (incV == -1 && i > angles[j])){
+          pulselen = map(i, 0, 180, servomin[servosnum[j]], servomax[servosnum[j]]);
+          pwm.setPWM(servosnum[j], 0, pulselen);
+          delay(INCRDEL);
+          if (i != angles[j])
+            i += incV*speed;
+        }else{
+          lastVal[servosnum[j]] = angles[j];
+          servosnum[j] =-1;
+          cantComplet++;
+          if (cantComplet == N){
+            notFinish = false;
+          }
+        }
+      }else{
+        if (j ==N){
+          j=-1;
+        }
+      }
+      j++;
+    }
+  }
 }
