@@ -173,7 +173,7 @@ void loop()
     if ( funcionPE == 2)
     {
       Serial.println("Bhasky dice no");
-      no();
+      noP();
     }
     if ( funcionPE == 3)
     {
@@ -200,11 +200,6 @@ void readnumbers()
   {
     servo = Serial.parseInt() - 1;
     angle = Serial.parseInt();
-
-    //    Serial.print("Read data: ");
-    //    Serial.print(servo);
-    //    Serial.print(" ");
-    //    Serial.println(angle);
 
     if ((servo >= 0) && (servo < NUMOFANGLES))
       readVal[servo] = angle;
@@ -315,7 +310,7 @@ void no()
   setAngle(RELBOW, readVal[RELBOW]);
   delay(DELAY_ENTRE_SERVOS);
 
-  readVal[LSHLDRA] = 135;
+  readVal[LSHLDRA] = 130;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
   delay(DELAY_ENTRE_SERVOS);
   
@@ -354,6 +349,14 @@ void no()
   readVal[LSHLDRA] = 160;
   setAngle(LSHLDRA, readVal[LSHLDRA]);
   delay(DELAY_ENTRE_SERVOS);
+ 
+}
+
+void noP()
+{
+  int servosnum[2]={RSHLDRA,LSHLDRA};
+  int angles[2]={35,130};
+  setAngleParallel(servosnum,angles,2);
  
 }
 /****************************************** darLaMano ******************************************/
@@ -463,3 +466,56 @@ void estabilizar()
   delay(DELAY_ENTRE_SERVOS);
 }
 
+boolean isAngleValid(int servosnum[],int angles[],int N){
+  for(int i=0;i++;i<N){
+     if ((angles[i] < anguloMin[servosnum[i]]) && (angles[i] > anguloMax[servosnum[i]])){
+       return false;
+     }
+  }
+  return true;
+}
+
+void setAngleParallel(int servosnum[], int angles[],int N)
+{
+  int i, pulselen;
+  int j=0;
+  int cantComplet=0;
+  int speed = 1;
+  boolean notFinish = true;
+  int endV, incV;
+
+  //va hasta uno menos
+  if(isAngleValid(servosnum,angles,N))
+  {
+    while(notFinish){
+      if (servosnum[j] != -1 && j<N){
+        if (lastVal[servosnum[j]] > angles[j])
+          incV = -1;
+        else
+          incV = 1;
+        i = lastVal[servosnum[j]];
+        if ((incV == 1 && i < angles[j] ) || (incV == -1 && i > angles[j])){
+          pulselen = map(i, 0, 180, servomin[servosnum[j]], servomax[servosnum[j]]);
+          pwm.setPWM(servosnum[j], 0, pulselen);
+
+          delay(INCRDEL);
+          if (i != angles[j])
+            i += incV*speed;
+          lastVal[servosnum[j]] = i;
+        } else {
+          lastVal[servosnum[j]] = angles[j];
+          servosnum[j] = -1;
+          cantComplet++;
+          if (cantComplet == N){
+            notFinish = false;
+          }
+        }
+      }else{
+        if (j == N){
+          j=-1;
+        }
+      }
+      j++;
+    }
+  }
+}
