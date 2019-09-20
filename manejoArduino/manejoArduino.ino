@@ -96,7 +96,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define RANKLE 13 // Right ankle articulation
 #define LANKLE 14 // Left ankle articulation
 
-#define NUMOFANGLES 15
+#define MAX_SERVOS 15
 
 /****************************************** Defino variables ******************************************/
 // Depending on your servo make, the pulse width min and max may vary, you
@@ -104,8 +104,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // for max range. You'll have to tweak them as necessary to match the servos you
 // have!
 // "Minimum" and "Maximum" pulse lengths for each servo. Indexes correspond to constants above
-int servomin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145 };
-int servomax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640 };
+int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145 };
+int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640 };
 int anguloMin[] = {25,  65,   5,    5,    5,    15,   90,   60,   85,   5,    75,   50,   85,   70,   35  };
 int anguloMax[] = {145, 175,  150,  80,   110,  160,  165,  75,   100,  75,   145,  75,   110,  120,  85  };
 int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60  };
@@ -113,14 +113,19 @@ int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   11
 
 
 // Last values for each servo/articulation. Needed for "natural movements"
-int lastVal[NUMOFANGLES] = {};
+int lastVal[MAX_SERVOS] = {};
 
 // Values read from Serial to set servo angles...
-int i, readVal[NUMOFANGLES] = {};
+int i, readVal[MAX_SERVOS] = {};
 
-//DECLARADOS POR MARTIN
+//Mods
 int funcionPE;
 int modo;
+
+//Inputs
+int servos[MAX_SERVOS]={};
+int angles[MAX_SERVOS]={}; 
+int posArray=0;
 
 /****************************************** SETUP ******************************************/
 void setup()
@@ -151,16 +156,12 @@ void loop()
   modo = readMonitorSerie();
   if (modo == 1)
   {
-    for (i = 0; i < NUMOFANGLES; i++)
-    {
-      if (readVal[i] != 0)
-      {
-        setAngle(i, readVal[i]);
-        Serial.println("Servo: ");
-        Serial.println(i);
-        Serial.println("Angulo: ");
-        Serial.println(readVal[i]);
-      }
+    if(posArray != 0 && servos[0]!= -1){
+      setAngleParallel();
+      Serial.println("Servo: ");
+      Serial.println(servos[0]);
+      Serial.println("Angulo: ");
+      Serial.println(angles[0]);
     }
   }
   else if (modo == 2)
@@ -168,7 +169,7 @@ void loop()
     if ( funcionPE == 1)
     {
       Serial.println("Bhasky saluda");
-      saludar();
+      saludarP();
     }
     if ( funcionPE == 2)
     {
@@ -178,31 +179,14 @@ void loop()
     if ( funcionPE == 3)
     {
       Serial.println("Bhasky da la mano");
-      darLaMano();
+      //darLaManoP();
+      caminar();
     }
     if ( funcionPE == 4)
     {
       Serial.println("Bhasky se estabiliza");
       estabilizar();
     }
-  }
-}
-
-/****************************************** readNumbers ******************************************/
-void readnumbers()
-{
-  int servo, angle;
-
-  for (i = 0; i < NUMOFANGLES; i++)
-    readVal[i] = 0;
-
-  if (Serial.available())
-  {
-    servo = Serial.parseInt() - 1;
-    angle = Serial.parseInt();
-
-    if ((servo >= 0) && (servo < NUMOFANGLES))
-      readVal[servo] = angle;
   }
 }
 
@@ -221,7 +205,7 @@ void setAngle(int servonum, int angle)
     i = lastVal[servonum];
     do
     {
-      pulselen = map(i, 0, 180, servomin[servonum], servomax[servonum]);
+      pulselen = map(i, 0, 180, servoMin[servonum], servoMax[servonum]);
       pwm.setPWM(servonum, 0, pulselen);
       delay(INCRDEL);
       if (i != angle)
@@ -241,14 +225,12 @@ int readMonitorSerie()
     modoF = Serial.parseInt();
     if (modoF == 1)
     {
-      for (i = 0; i < NUMOFANGLES; i++)
-        readVal[i] = 0;
-        
-        servo = Serial.parseInt() - 1;
-        angle = Serial.parseInt();
-  
-        if ((servo >= 0) && (servo < NUMOFANGLES))
-          readVal[servo] = angle;
+      cleanInputs();
+      servo = Serial.parseInt();
+      angle = Serial.parseInt();
+      if ((servo >= 0) && (servo < MAX_SERVOS)){
+        addInput(servo,angle);
+      }
     }
     else if (modoF == 2)
     {
@@ -299,6 +281,41 @@ void saludar()
   delay(DELAY_ENTRE_SERVOS);
 }
 
+void saludarP(){
+  cleanInputs();
+  addInput(RSHLDRA,35);
+  addInput(LSHLDRA,130);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LSHLDRA,65);
+  addInput(RELBOW,5);
+  setAngleParallel();
+  
+  cleanInputs();
+  addInput(LSHLDRA,25);
+  addInput(HEAD,30);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,130);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,posHome[HEAD]);
+  addInput(LSHLDRA,70);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LSHLDRA,135);
+  addInput(RELBOW,posHome[RELBOW]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LSHLDRA,posHome[LSHLDRA]);
+  addInput(RSHLDRA,posHome[RSHLDRA]);
+  setAngleParallel();
+}
 /****************************************** no ******************************************/
 void no()
 {
@@ -354,11 +371,43 @@ void no()
 
 void noP()
 {
-  int servosnum[2]={RSHLDRA,LSHLDRA};
-  int angles[2]={35,130};
-  setAngleParallel(servosnum,angles,2);
- 
+  cleanInputs();
+  addInput(RSHLDRA,35);
+  addInput(LSHLDRA,130);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW,5);
+  addInput(LELBOW,150);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,85);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,30);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,140);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(HEAD,posHome[HEAD]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW,posHome[RELBOW]);
+  addInput(LELBOW,posHome[LELBOW]);
+  setAngleParallel();
+  
+  cleanInputs();
+  addInput(RSHLDRA,posHome[RSHLDRA]);
+  addInput(LSHLDRA,posHome[LSHLDRA]);
+  setAngleParallel();
 }
+
 /****************************************** darLaMano ******************************************/
 void darLaMano(){
   
@@ -387,6 +436,74 @@ void darLaMano(){
   delay(DELAY_ENTRE_SERVOS);
   
 }
+
+void darLaManoP(){
+
+  cleanInputs();
+  addInput(RSHLDRT,150);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RSHLDRT,130);
+  setAngleParallel();    
+
+
+  cleanInputs();
+  addInput(RSHLDRT,150);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RSHLDRT,130);
+  setAngleParallel(); 
+    
+  cleanInputs();
+  addInput(RSHLDRT,150);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RSHLDRT,posHome[RSHLDRT]);
+  setAngleParallel(); 
+}
+/****************************************** caminar ******************************************/
+void caminar(){
+  //Salir de posicion estatica
+  cleanInputs();
+  addInput(RTHIGH,30);
+  addInput(RANKLE,80);
+  setAngleParallel();
+
+  for(int i=0;i<3;i++){
+    //Paso Izq
+    cleanInputs();
+    addInput(LTHIGH,130);
+    addInput(LANKLE,80);
+    addInput(RANKLE,posHome[RANKLE]);
+    addInput(RTHIGH,posHome[RTHIGH]);
+    addInput(RSHLDRT,85);
+    addInput(LSHLDRT,95);
+    setAngleParallel();
+  
+    //Paso Der
+    cleanInputs();
+    addInput(RTHIGH,25);
+    addInput(RANKLE,75);
+    addInput(LTHIGH,posHome[LTHIGH]);
+    addInput(LANKLE,posHome[LANKLE]);
+    addInput(RSHLDRT,65);
+    addInput(LSHLDRT,75);
+    setAngleParallel();
+  }
+  
+  //Estabilizar
+  cleanInputs();
+  addInput(RANKLE,posHome[RANKLE]);
+  addInput(RTHIGH,posHome[RTHIGH]);
+  addInput(LTHIGH,posHome[LTHIGH]);
+  addInput(LANKLE,posHome[LANKLE]);
+  setAngleParallel();
+}
+
+
 /****************************************** estabilizar ******************************************/
 void estabilizar()
 {
@@ -466,56 +583,76 @@ void estabilizar()
   delay(DELAY_ENTRE_SERVOS);
 }
 
-boolean isAngleValid(int servosnum[],int angles[],int N){
-  for(int i=0;i++;i<N){
-     if ((angles[i] < anguloMin[servosnum[i]]) && (angles[i] > anguloMax[servosnum[i]])){
+/****************************************** isAngleValid ******************************************/
+boolean isAngleValid(){
+  for(int i=0;i++;i<posArray){
+     if ((angles[i] < anguloMin[servos[i]]) || (angles[i] > anguloMax[servos[i]])){
        return false;
      }
   }
   return true;
 }
 
-void setAngleParallel(int servosnum[], int angles[],int N)
+/****************************************** setAngleParallel ******************************************/
+void setAngleParallel()
 {
   int i, pulselen;
   int j=0;
   int cantComplet=0;
-  int speed = 1;
+  int speed = 2;
   boolean notFinish = true;
-  int endV, incV;
+  int incV[posArray]={};
 
-  //va hasta uno menos
-  if(isAngleValid(servosnum,angles,N))
-  {
+  if(isAngleValid())
+  {   
+    for(i=0;i<posArray;i++){
+      if (lastVal[servos[i]] > angles[i])
+        incV[i] = -1;
+      else
+        incV[i] = 1; 
+      lastVal[servos[i]]+=incV[i];
+    }
     while(notFinish){
-      if (servosnum[j] != -1 && j<N){
-        if (lastVal[servosnum[j]] > angles[j])
-          incV = -1;
-        else
-          incV = 1;
-        i = lastVal[servosnum[j]];
-        if ((incV == 1 && i < angles[j] ) || (incV == -1 && i > angles[j])){
-          pulselen = map(i, 0, 180, servomin[servosnum[j]], servomax[servosnum[j]]);
-          pwm.setPWM(servosnum[j], 0, pulselen);
-
+      if (servos[j] != -1 && j<posArray){
+        i = lastVal[servos[j]];
+        if ((incV[j] == 1 && i <= angles[j] ) || (incV[j] == -1 && i >= angles[j])){
+          pulselen = map(i, 0, 180, servoMin[servos[j]], servoMax[servos[j]]);
+          pwm.setPWM(servos[j], 0, pulselen);
           delay(INCRDEL);
-          if (i != angles[j])
-            i += incV*speed;
-          lastVal[servosnum[j]] = i;
+          i += incV[j]*speed;
+          lastVal[servos[j]] = i;
         } else {
-          lastVal[servosnum[j]] = angles[j];
-          servosnum[j] = -1;
+          lastVal[servos[j]] = angles[j];
+          servos[j] = -1;
           cantComplet++;
-          if (cantComplet == N){
+          if (cantComplet == posArray){
             notFinish = false;
           }
         }
       }else{
-        if (j == N){
+        if (j == posArray){
           j=-1;
         }
       }
       j++;
     }
   }
+  delay(DELAY_ENTRE_SERVOS);
+}
+
+/****************************************** Manejo de Inputs ******************************************/
+
+void cleanInputs(){
+  int i;
+  for(i=0;i<MAX_SERVOS;i++){
+    servos[i]=-1;
+    angles[i]=0;
+  }
+  posArray=0;
+}
+
+void addInput(int servo, int angle){
+  servos[posArray]=servo;
+  angles[posArray]=angle;
+  posArray++;
 }
