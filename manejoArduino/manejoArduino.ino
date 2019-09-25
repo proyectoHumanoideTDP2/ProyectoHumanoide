@@ -179,10 +179,14 @@ void loop()
     if ( funcionPE == 3)
     {
       Serial.println("Bhasky da la mano");
-      //darLaManoP();
-      caminar();
+      darLaManoP();
     }
     if ( funcionPE == 4)
+    {
+      Serial.println("Bhasky camina");
+      caminar();
+    }
+    if ( funcionPE == 5)
     {
       Serial.println("Bhasky se estabiliza");
       estabilizar();
@@ -585,7 +589,7 @@ void estabilizar()
 
 /****************************************** isAngleValid ******************************************/
 boolean isAngleValid(){
-  for(int i=0;i++;i<posArray){
+  for(int i=0;i<posArray;i++){
      if ((angles[i] < anguloMin[servos[i]]) || (angles[i] > anguloMax[servos[i]])){
        return false;
      }
