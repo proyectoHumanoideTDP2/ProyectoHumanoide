@@ -1,5 +1,6 @@
 #include <ESP8266WebServer.h>
 #include "index.h"
+#include <FS.h>
 
 //AP SSID and Password
 const char *ssid = "Bhasky";
@@ -28,7 +29,16 @@ void handleRoot() {
   }
   
 }
- 
+void bootstrap()
+{
+  File file = SPIFFS.open("/bootstrap.min.css", "r"); 
+  size_t sent = server.streamFile(file, "text/css");
+}
+
+
+
+
+
 //===============================================================
 //                  Setup
 //===============================================================
@@ -46,6 +56,11 @@ void setup(void)
   
   server.on("/", handleRoot);     //GET / ==> run handleRoot()
   server.begin();                 //Start web server
+  server.on("/bootstrap.min.css", bootstrap);
+  server.on("bootstrap.min.css", bootstrap);
+
+
+  SPIFFS.begin(); 
 }
 //===============================================================
 //                     Loop
