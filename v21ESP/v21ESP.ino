@@ -8,7 +8,6 @@ const char *password = "123qweasd";
  
 ESP8266WebServer server(80); //Web server
 
-
 //=======================================================================
 //    index.html 
 //=======================================================================
@@ -29,15 +28,12 @@ void handleRoot() {
   }
   
 }
+
 void bootstrap()
 {
   File file = SPIFFS.open("/bootstrap.min.css", "r"); 
   size_t sent = server.streamFile(file, "text/css");
 }
-
-
-
-
 
 //===============================================================
 //                  Setup
