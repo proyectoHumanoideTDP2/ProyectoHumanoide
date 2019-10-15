@@ -35,8 +35,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // "Minimum" and "Maximum" pulse lengths for each servo. Indexes correspond to constants above
 int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145 };
 int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640 };
-int anguloMin[] = {25,  65,   5,    5,    5,    15,   90,   60,   85,   5,    75,   50,   85,   70,   35  };
-int anguloMax[] = {145, 175,  150,  80,   110,  160,  165,  75,   100,  75,   145,  75,   110,  120,  85  };
+int anguloMin[] = {25,  65,   5,    70,    5,    15,  80,   60,   85,   5,    75,   50,   85,   70,   35  };
+int anguloMax[] = {145, 175,  150,  80,   110,  160,  90,  75,   100,  75,   145,  75,   110,  120,  85  };
 int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60  };
 //                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14
 
@@ -64,7 +64,8 @@ void setup()
   Serial.println("  1 - Saludar");
   Serial.println("  2 - Decir que no");
   Serial.println("  3 - Dar la mano");
-  Serial.println("  4 - Estabilizar");
+  Serial.println("  4 - Caminar");
+  Serial.println("  5 - Estabilizar");
 
   pwm.begin();
   pwm.setPWMFreq(60); // Analog servos run at ~60 Hz updates
@@ -110,6 +111,14 @@ void loop()
       case 5:
         Serial.println("Bhasky se estabiliza");
         estabilizar();
+        break;
+      case 6:
+        Serial.println("Bhasky festeja a lo Pogba");
+        pogba();
+        break;
+      case 7:
+        Serial.println("Bhasky hace la onda");
+        onda();
         break;
       default:
         Serial.println("Bhasky no hace nada");
@@ -177,17 +186,15 @@ void setAngleParallel()
       if (servos[j] != -1 && j<posArray){
         i = lastVal[servos[j]];
         if ((incV[j] == 1 && i <= angles[j] ) || (incV[j] == -1 && i >= angles[j])){
-          //pulselen = map(i, 0, 180, servoMin[servos[j]], servoMax[servos[j]]);
-          //pwm.setPWM(servos[j], 0, pulselen);
+          pulselen = map(i, 0, 180, servoMin[servos[j]], servoMax[servos[j]]);
+          pwm.setPWM(servos[j], 0, pulselen);
           delay(INCRDEL);
           i += incV[j]*speed;
           lastVal[servos[j]] = i;
         } else {
           lastVal[servos[j]] = angles[j];
-          Serial.print("El servo ");
-          Serial.print(servos[j]);
-          Serial.print("Esta en el angulo ");
-          Serial.println(lastVal[servos[j]]);
+          if (servos[j] > 0 && servos[j] < 7 )
+            limitarBrazos();
           servos[j] = -1;
           cantComplet++;
           if (cantComplet == posArray){
@@ -226,14 +233,62 @@ void inicializarLastVal(){
   for(int i=0;i<MAX_SERVOS;i++){
     lastVal[i] = posHome[i] - 1;
   }
+  Serial.println("Se Inicializo LastVal");
+}
+
+/****************************************** Limitar Brazos ******************************************/
+void limitarBrazos(){
+  if ( lastVal[RSHLDRT] > 109 || lastVal[RSHLDRA] > 34 ){
+    anguloMin[RELBOW] = 5;
+    if ( lastVal[RELBOW] < posHome[RELBOW] ){
+      if ( lastVal[RSHLDRT] > 109 )
+        anguloMin[RSHLDRA] = 5;
+      if ( lastVal[RSHLDRA] > 34 )
+        anguloMin[RSHLDRT] = 65;
+    }
+  } else {
+    anguloMin[RELBOW] = posHome[RELBOW];
+  }
+  
+  if (lastVal[LSHLDRT] < 46 || lastVal[LSHLDRA] < 131  ){
+    anguloMax[LELBOW] = 165;
+    if( lastVal[LELBOW] > posHome[LELBOW] ){
+      if ( lastVal[LSHLDRT] < 46 )
+        anguloMax[LSHLDRA] = 160;
+      if ( lastVal[LSHLDRA] < 131 )
+        anguloMax[LSHLDRT] = 110; 
+    }
+  } else {
+    anguloMax[LELBOW] = posHome[LELBOW];
+  }
+
+  if (lastVal[RELBOW] < posHome[RELBOW]){
+    if (lastVal[RSHLDRT] > 109 && lastVal[RSHLDRA] < 36 )
+      anguloMin[RSHLDRT] = 110;
+    if (lastVal[RSHLDRA] > 34 && lastVal[RSHLDRT] < 111 )
+      anguloMin[RSHLDRA] = 35;
+  } else {
+    anguloMin[RSHLDRT] = 65;
+    anguloMin[RSHLDRA] = 5;
+  }
+
+  if (lastVal[LELBOW] > posHome[LELBOW]){
+    if (lastVal[LSHLDRT] < 46 && lastVal[LSHLDRA] > 129)
+      anguloMax[LSHLDRT] = 45;
+    if (lastVal[LSHLDRA] < 131 && lastVal[LSHLDRT] > 44)
+      anguloMax[LSHLDRA] = 130;
+  } else {
+    anguloMax[LSHLDRT] = 110;
+    anguloMax[LSHLDRA] = 160;
+  }
 }
 
 /****************************************** Defino las funciones del robot ******************************************/
-/****************************************** saludar ******************************************/
+/****************************************** Saludar ******************************************/
 void saludar(){
   cleanInputs();
   addInput(RSHLDRA,35);
-  addInput(LSHLDRA,130);
+  addInput(LSHLDRA,120);
   setAngleParallel();
 
   cleanInputs();
@@ -266,7 +321,7 @@ void saludar(){
   setAngleParallel();
 }
 
-/****************************************** no ******************************************/
+/****************************************** Decir que No ******************************************/
 void no()
 {
   cleanInputs();
@@ -306,7 +361,7 @@ void no()
   setAngleParallel();
 }
 
-/****************************************** darLaMano ******************************************/
+/****************************************** Dar La Mano ******************************************/
 void darLaMano(){
 
   cleanInputs();
@@ -334,7 +389,7 @@ void darLaMano(){
   addInput(RSHLDRT,posHome[RSHLDRT]);
   setAngleParallel(); 
 }
-/****************************************** caminar ******************************************/
+/****************************************** Caminar ******************************************/
 void caminar(){
   //Salir de posicion estatica
   cleanInputs();
@@ -373,16 +428,118 @@ void caminar(){
   setAngleParallel();
 }
 
-
-/****************************************** estabilizar ******************************************/
+/****************************************** Estabilizar ******************************************/
 void estabilizar()
 {
   if (lastVal[0] == 0)
     inicializarLastVal();
 
-  for(int i=0;i<MAX_SERVOS;i++){
-    cleanInputs();
-    addInput(i,posHome[i]);
-    setAngleParallel(); 
-  }
+  cleanInputs();
+  addInput(HEAD,posHome[HEAD]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RELBOW,posHome[RELBOW]);
+  addInput(LELBOW,posHome[LELBOW]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RSHLDRA,posHome[RSHLDRA]);
+  addInput(LSHLDRA,posHome[LSHLDRA]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RSHLDRT,posHome[RSHLDRT]);
+  addInput(LSHLDRT,posHome[LSHLDRT]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RHIP,posHome[RHIP]);
+  addInput(LHIP,posHome[LHIP]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RTHIGH,posHome[RTHIGH]);
+  addInput(LTHIGH,posHome[LTHIGH]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RKNEE,posHome[RKNEE]);
+  addInput(LKNEE,posHome[LKNEE]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RANKLE,posHome[RANKLE]);
+  addInput(LANKLE,posHome[LANKLE]);
+  setAngleParallel(); 
+}
+
+void pogba(){
+  
+  cleanInputs();
+  addInput(RSHLDRT, 175);
+  addInput(LSHLDRA, 80);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, 20);
+  addInput(LSHLDRA, 35);
+  addInput(HEAD, 40);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RTHIGH, 30);
+  addInput(RELBOW, 5);
+  setAngleParallel();
+
+  delay(1000);
+
+  cleanInputs();
+  addInput(RTHIGH, posHome[RTHIGH]);
+  addInput(RELBOW, 20);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, posHome[RELBOW]);
+  addInput(LSHLDRA, 80);
+  addInput(HEAD, posHome[HEAD]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RSHLDRT, posHome[RSHLDRT]);
+  addInput(LSHLDRA, posHome[LSHLDRA]);
+  setAngleParallel();  
+
+}
+
+void onda(){
+  
+  cleanInputs();
+  addInput(RSHLDRA, 100);
+  addInput(RSHLDRT, 65);
+  addInput(LSHLDRA, 60);
+  addInput(LSHLDRT, 90);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, 40);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, 80);
+  addInput(RSHLDRA, 85);
+  addInput(LSHLDRA, 55);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RSHLDRA, 100);
+  addInput(LSHLDRA, 60);
+  addInput(LELBOW, 80);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LELBOW, 105);
+  setAngleParallel();
+
+
 }
