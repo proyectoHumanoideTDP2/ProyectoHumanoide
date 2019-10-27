@@ -9,7 +9,8 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define INCRDEL 20 // "time-step", ms delay for each angle-step
 #define DELAY_ENTRE_SERVOS 250 
 
-#define HEAD    0   // Head
+#define HEAD    99  // Head  145/635/25/145/85
+#define RFOOT   0   // Right foot
 #define RSHLDRT 1   // Right shoulder articulation with torso
 #define RSHLDRA 2   // Right shoulder articulation with arm
 #define RELBOW  3   // Right elbow articulation
@@ -24,8 +25,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define LKNEE   12  // Left knee articulation
 #define RANKLE  13  // Right ankle articulation
 #define LANKLE  14  // Left ankle articulation
+#define LFOOT   15  // Left foot
 
-#define MAX_SERVOS 15
+
+#define MAX_SERVOS 16
 
 /****************************************** Defino variables ******************************************/
 // Depending on your servo make, the pulse width min and max may vary, you
@@ -33,12 +36,12 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // for max range. You'll have to tweak them as necessary to match the servos you
 // have!
 // "Minimum" and "Maximum" pulse lengths for each servo. Indexes correspond to constants above
-int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145 };
-int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640 };
-int anguloMin[] = {25,  65,   5,    70,    5,    15,  80,   60,   85,   5,    75,   50,   85,   70,   35  };
-int anguloMax[] = {145, 175,  150,  80,   110,  160,  90,  75,   100,  75,   145,  75,   110,  120,  85  };
-int posHome[] =   {85,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60  };
-//                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14
+int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145, 145 };
+int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640, 635 };
+int anguloMin[] = {60,   65,   5,    70,   5,    15,   80,   60,   85,   5,    75,   50,   85,   70,   35,  60   };
+int anguloMax[] = {100, 175,  150,  80,   110,  160,  90,   75,   100,  75,   145,  75,   110,  120,  85,  100 };
+int posHome[] =   {80,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60,  80  };
+//                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14   15
 
 // Last values for each servo/articulation. Needed for "natural movements"
 int lastVal[MAX_SERVOS] = {};
@@ -310,15 +313,15 @@ void saludar(){
   
   cleanInputs();
   addInput(LSHLDRA,25);
-  addInput(HEAD,30);
+  //addInput(HEAD,30);
   setAngleParallel();
-
+/*
   cleanInputs();
-  addInput(HEAD,130);
+  //addInput(HEAD,130);
   setAngleParallel();
-
+*/
   cleanInputs();
-  addInput(HEAD,posHome[HEAD]);
+  //addInput(HEAD,posHome[HEAD]);
   addInput(LSHLDRA,70);
   setAngleParallel();
 
@@ -346,22 +349,22 @@ void no()
   addInput(LELBOW,150);
   setAngleParallel();
 
-  cleanInputs();
-  addInput(HEAD,85);
+ /* cleanInputs();
+  //addInput(HEAD,85);
   setAngleParallel();
 
   cleanInputs();
-  addInput(HEAD,30);
+  //addInput(HEAD,30);
   setAngleParallel();
 
   cleanInputs();
-  addInput(HEAD,140);
+ //addInput(HEAD,140);
   setAngleParallel();
 
   cleanInputs();
-  addInput(HEAD,posHome[HEAD]);
+  //addInput(HEAD,posHome[HEAD]);
   setAngleParallel();
-
+*/
   cleanInputs();
   addInput(RELBOW,posHome[RELBOW]);
   addInput(LELBOW,posHome[LELBOW]);
@@ -433,6 +436,9 @@ void caminar(){
   
   //Estabilizar
   cleanInputs();
+  addInput(LSHLDRT,posHome[LSHLDRT]);
+  addInput(RSHLDRT,posHome[RSHLDRT]);
+  addInput(RANKLE,posHome[RANKLE]);
   addInput(RANKLE,posHome[RANKLE]);
   addInput(RTHIGH,posHome[RTHIGH]);
   addInput(LTHIGH,posHome[LTHIGH]);
@@ -447,9 +453,9 @@ void estabilizar()
   if (lastVal[0] == 0)
     inicializarLastVal();
 
-  cleanInputs();
-  addInput(HEAD,posHome[HEAD]);
-  setAngleParallel(); 
+  //cleanInputs();
+  //addInput(HEAD,posHome[HEAD]);
+  //setAngleParallel(); 
 
   cleanInputs();
   addInput(RELBOW,posHome[RELBOW]);
@@ -485,6 +491,11 @@ void estabilizar()
   addInput(RANKLE,posHome[RANKLE]);
   addInput(LANKLE,posHome[LANKLE]);
   setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RFOOT,posHome[RFOOT]);
+  addInput(LFOOT,posHome[LFOOT]);
+  setAngleParallel(); 
 }
 
 /****************************************** Dab ******************************************/
@@ -498,6 +509,7 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, 40);
   addInput(LSHLDRA, 35);
+  //addInput(HEAD, 40);
   setAngleParallel();
 
   cleanInputs();
@@ -516,7 +528,7 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, posHome[RELBOW]);
   addInput(LSHLDRA, 80);
-  addInput(HEAD, posHome[HEAD]);
+  //addInput(HEAD, posHome[HEAD]);
   setAngleParallel();
 
   cleanInputs();
