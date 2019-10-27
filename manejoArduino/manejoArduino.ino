@@ -114,7 +114,7 @@ void loop()
         break;
       case 6:
         Serial.println("Bhasky festeja a lo Pogba");
-        pogba();
+        dab();
         break;
       case 7:
         Serial.println("Bhasky hace la onda");
@@ -474,7 +474,8 @@ void estabilizar()
   setAngleParallel(); 
 }
 
-void pogba(){
+/****************************************** Dab ******************************************/
+void dab(){
   
   cleanInputs();
   addInput(RSHLDRT, 175);
@@ -482,12 +483,12 @@ void pogba(){
   setAngleParallel();
 
   cleanInputs();
-  addInput(RELBOW, 20);
+  addInput(RELBOW, 40);
   addInput(LSHLDRA, 35);
-  addInput(HEAD, 40);
   setAngleParallel();
 
   cleanInputs();
+  addInput(HEAD, 40);
   addInput(RTHIGH, 30);
   addInput(RELBOW, 5);
   setAngleParallel();
@@ -512,34 +513,79 @@ void pogba(){
 
 }
 
+/****************************************** Onda ******************************************/
 void onda(){
   
   cleanInputs();
-  addInput(RSHLDRA, 100);
+  addInput(RSHLDRA, 90);
   addInput(RSHLDRT, 65);
-  addInput(LSHLDRA, 60);
+  addInput(LSHLDRA, 75);
   addInput(LSHLDRT, 90);
   setAngleParallel();
 
   cleanInputs();
-  addInput(RELBOW, 40);
+  addInput(RELBOW, 35);
+  addInput(RSHLDRA, 110);
   setAngleParallel();
 
   cleanInputs();
-  addInput(RELBOW, 80);
-  addInput(RSHLDRA, 85);
-  addInput(LSHLDRA, 55);
+  addInput(RELBOW, 70);
+  addInput(RSHLDRA, 75);
+  addInput(LSHLDRA, 50);
   setAngleParallel();
 
   cleanInputs();
-  addInput(RSHLDRA, 100);
+  addInput(LELBOW, 90);
+  addInput(RSHLDRA, 90);
+  addInput(LSHLDRA, 70);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LELBOW, 125);
   addInput(LSHLDRA, 60);
-  addInput(LELBOW, 80);
   setAngleParallel();
 
   cleanInputs();
-  addInput(LELBOW, 105);
+  addInput(LELBOW, 90);
+  addInput(LSHLDRA, 75);
   setAngleParallel();
+
+  cleanInputs();
+  addInput(LELBOW, 125);
+  addInput(LSHLDRA, 60);
+  setAngleParallel();
+  
+  cleanInputs();
+  addInput(LELBOW, 90);
+  addInput(LSHLDRA, 90);
+  addInput(RSHLDRA, 105);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, 65);
+  addInput(LSHLDRA, 75);
+  addInput(RSHLDRA, 80);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW, 70);
+  addInput(RSHLDRA, 90);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(RELBOW,posHome[RELBOW]);
+  addInput(LELBOW,posHome[LELBOW]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RSHLDRA,posHome[RSHLDRA]);
+  addInput(LSHLDRA,posHome[LSHLDRA]);
+  setAngleParallel(); 
+
+  cleanInputs();
+  addInput(RSHLDRT,posHome[RSHLDRT]);
+  addInput(LSHLDRT,posHome[LSHLDRT]);
+  setAngleParallel(); 
 
 
 }
