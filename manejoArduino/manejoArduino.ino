@@ -10,7 +10,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define DELAY_ENTRE_SERVOS 250 
 
 #define HEAD    99  // Head  145/635/25/145/85
-#define RFOOT   0   // Right foot
+#define RFOOT   0   // Right foot articulation
 #define RSHLDRT 1   // Right shoulder articulation with torso
 #define RSHLDRA 2   // Right shoulder articulation with arm
 #define RELBOW  3   // Right elbow articulation
@@ -25,7 +25,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define LKNEE   12  // Left knee articulation
 #define RANKLE  13  // Right ankle articulation
 #define LANKLE  14  // Left ankle articulation
-#define LFOOT   15  // Left foot
+#define LFOOT   15  // Left foot articulation
 
 
 #define MAX_SERVOS 16
@@ -122,9 +122,9 @@ void loop()
         dab();
         break;
       case 6:
-        break;
         Serial.println("Bhasky hace la onda");
         onda();
+        break;
       default:
         Serial.println("Bhasky no hace nada");
         break;
@@ -409,7 +409,7 @@ void caminar(){
   //Salir de posicion estatica
   cleanInputs();
   addInput(RTHIGH,30);
-  addInput(RANKLE,80);
+  addInput(RFOOT,100);
   setAngleParallel();
  
   for(int i=0;i<pasos;i++){
@@ -417,10 +417,10 @@ void caminar(){
     cleanInputs();
     addInput(LTHIGH,130);
     addInput(LANKLE,80);
-    addInput(RANKLE,posHome[RANKLE]);
+    addInput(RANKLE,110);
     addInput(RTHIGH,posHome[RTHIGH]);
-    addInput(RSHLDRT,85);
-    addInput(LSHLDRT,95);
+    addInput(RFOOT,60);
+    addInput(LFOOT,70);
     setAngleParallel();
   
     //Paso Der
@@ -428,17 +428,16 @@ void caminar(){
     addInput(RTHIGH,25);
     addInput(RANKLE,75);
     addInput(LTHIGH,posHome[LTHIGH]);
-    addInput(LANKLE,posHome[LANKLE]);
-    addInput(RSHLDRT,65);
-    addInput(LSHLDRT,75);
+    addInput(LANKLE,45);
+    addInput(RFOOT,90);
+    addInput(LFOOT,100);
     setAngleParallel();
   }
   
   //Estabilizar
   cleanInputs();
-  addInput(LSHLDRT,posHome[LSHLDRT]);
-  addInput(RSHLDRT,posHome[RSHLDRT]);
-  addInput(RANKLE,posHome[RANKLE]);
+  addInput(RFOOT,posHome[RFOOT]);
+  addInput(LFOOT,posHome[LFOOT]);
   addInput(RANKLE,posHome[RANKLE]);
   addInput(RTHIGH,posHome[RTHIGH]);
   addInput(LTHIGH,posHome[LTHIGH]);
@@ -509,7 +508,6 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, 40);
   addInput(LSHLDRA, 35);
-  //addInput(HEAD, 40);
   setAngleParallel();
 
   cleanInputs();
@@ -528,7 +526,7 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, posHome[RELBOW]);
   addInput(LSHLDRA, 80);
-  //addInput(HEAD, posHome[HEAD]);
+  addInput(HEAD, posHome[HEAD]);
   setAngleParallel();
 
   cleanInputs();
