@@ -38,9 +38,9 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // "Minimum" and "Maximum" pulse lengths for each servo. Indexes correspond to constants above
 int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145, 145 };
 int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640, 635 };
-int anguloMin[] = {60,   65,   5,    70,   5,    15,   80,   60,   85,   5,    75,   50,   85,   70,   35,  60   };
+int anguloMin[] = {60,   65,   5,    70,   5,    15,   80,   60,   80,   5,    75,   50,   85,   70,  35,  60   };
 int anguloMax[] = {100, 175,  150,  80,   110,  160,  90,   75,   100,  75,   145,  75,   110,  120,  85,  100 };
-int posHome[] =   {80,  75,   5,    70,   85,   160,  90,   75,   85,   45,   110,  75,   85,   95,   60,  80  };
+int posHome[] =   {80,  75,   5,    70,   85,   160,  90,   75,   80,   45,   110,  75,   85,   100,   60,  80  };
 //                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14   15
 
 // Last values for each servo/articulation. Needed for "natural movements"
@@ -183,7 +183,7 @@ void setAngleParallel()
   int i, pulselen;
   int j=0;
   int cantComplet=0;
-  int speed = 2;
+  int speed = 3;
   int incV[posArray]={};
   boolean notFinish = true;
   
@@ -408,29 +408,34 @@ void darLaMano(){
 void caminar(){
   //Salir de posicion estatica
   cleanInputs();
-  addInput(RTHIGH,30);
-  addInput(RFOOT,100);
+  addInput(RTHIGH, 15);
+  addInput(RANKLE, 80);
+  addInput(LANKLE, 50);
   setAngleParallel();
  
   for(int i=0;i<pasos;i++){
     //Paso Izq
     cleanInputs();
-    addInput(LTHIGH,130);
-    addInput(LANKLE,80);
-    addInput(RANKLE,110);
-    addInput(RTHIGH,posHome[RTHIGH]);
-    addInput(RFOOT,60);
-    addInput(LFOOT,70);
+    addInput(RTHIGH, 40);
+    addInput(RANKLE, 110);
+    addInput(LTHIGH, 145);
+    addInput(LANKLE, 75);
+    addInput(RFOOT, 90);
+    addInput(LFOOT, posHome[LFOOT]);
+    addInput(RSHLDRT,85);
+    addInput(LSHLDRT,95);
     setAngleParallel();
   
     //Paso Der
     cleanInputs();
-    addInput(RTHIGH,25);
-    addInput(RANKLE,75);
-    addInput(LTHIGH,posHome[LTHIGH]);
-    addInput(LANKLE,45);
-    addInput(RFOOT,90);
-    addInput(LFOOT,100);
+    addInput(LTHIGH, 115);
+    addInput(LANKLE, 50);
+    addInput(RTHIGH, 5);
+    addInput(RANKLE, 80);
+    addInput(LFOOT, 70);
+    addInput(RFOOT, posHome[RFOOT]);
+    addInput(RSHLDRT,65);
+    addInput(LSHLDRT,75);
     setAngleParallel();
   }
   
@@ -439,9 +444,11 @@ void caminar(){
   addInput(RFOOT,posHome[RFOOT]);
   addInput(LFOOT,posHome[LFOOT]);
   addInput(RANKLE,posHome[RANKLE]);
+  addInput(LANKLE,posHome[LANKLE]);
   addInput(RTHIGH,posHome[RTHIGH]);
   addInput(LTHIGH,posHome[LTHIGH]);
-  addInput(LANKLE,posHome[LANKLE]);
+  addInput(RSHLDRT,posHome[RSHLDRT]);
+  addInput(LSHLDRT,posHome[LSHLDRT]);
   setAngleParallel();
   pasos = 0;
 }
