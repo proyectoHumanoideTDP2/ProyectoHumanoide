@@ -107,23 +107,28 @@ void loop()
         break;
       case 2:
         Serial.println("Bhasky saluda");
+        estabilizar();
         saludar();
         break;
       case 3:
         Serial.println("Bhasky dice no");
+        estabilizar();
         no();
         break;
       case 4:
         Serial.println("Bhasky da la mano");
+        estabilizar();
         darLaMano();
         break;
       case 5:
         Serial.println("Bhasky hace el dab");
         dab();
+        estabilizar();
         break;
       case 6:
         Serial.println("Bhasky hace la onda");
         onda();
+        estabilizar();
         break;
       default:
         Serial.println("Bhasky no hace nada");
@@ -416,26 +421,22 @@ void caminar(){
   for(int i=0;i<pasos;i++){
     //Paso Izq
     cleanInputs();
-    addInput(RTHIGH, 40);
-    addInput(RANKLE, 110);
-    addInput(LTHIGH, 145);
-    addInput(LANKLE, 75);
-    addInput(RFOOT, 90);
-    addInput(LFOOT, posHome[LFOOT]);
-    addInput(RSHLDRT,85);
-    addInput(LSHLDRT,95);
+    addInput(RTHIGH, 50);
+    addInput(RANKLE, 105);
+    addInput(LTHIGH, 135);
+    addInput(LANKLE, 85);
+    addInput(RFOOT, 95);
+    addInput(LFOOT,85);
     setAngleParallel();
   
     //Paso Der
     cleanInputs();
-    addInput(LTHIGH, 115);
+    addInput(LTHIGH, 105);
     addInput(LANKLE, 50);
-    addInput(RTHIGH, 5);
-    addInput(RANKLE, 80);
-    addInput(LFOOT, 70);
-    addInput(RFOOT, posHome[RFOOT]);
-    addInput(RSHLDRT,65);
-    addInput(LSHLDRT,75);
+    addInput(RTHIGH, 15);
+    addInput(RANKLE, 85);
+    addInput(LFOOT, 65);
+    addInput(RFOOT, 75);
     setAngleParallel();
   }
   
@@ -447,8 +448,6 @@ void caminar(){
   addInput(LANKLE,posHome[LANKLE]);
   addInput(RTHIGH,posHome[RTHIGH]);
   addInput(LTHIGH,posHome[LTHIGH]);
-  addInput(RSHLDRT,posHome[RSHLDRT]);
-  addInput(LSHLDRT,posHome[LSHLDRT]);
   setAngleParallel();
   pasos = 0;
 }
@@ -518,7 +517,7 @@ void dab(){
   setAngleParallel();
 
   cleanInputs();
-  addInput(HEAD, 40);
+  //addInput(HEAD, 40);
   addInput(RTHIGH, 30);
   addInput(RELBOW, 5);
   setAngleParallel();
@@ -533,7 +532,7 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, posHome[RELBOW]);
   addInput(LSHLDRA, 80);
-  addInput(HEAD, posHome[HEAD]);
+  //addInput(HEAD, posHome[HEAD]);
   setAngleParallel();
 
   cleanInputs();
