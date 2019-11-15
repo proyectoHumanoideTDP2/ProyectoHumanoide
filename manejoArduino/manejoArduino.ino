@@ -104,10 +104,6 @@ void loop()
         Serial.println("Bhasky da la mano");
         darLaMano();
         break;
-      case 4:
-        Serial.println("Bhasky camina");
-        caminar();
-        break;
       case 5:
         Serial.println("Bhasky se estabiliza");
         estabilizar();
@@ -131,7 +127,7 @@ void loop()
 int readMonitorSerie()
 {
   int modoF;
-  int servo, angle;
+  int servo, angle,pasos;
   if (Serial.available())
   {
     modoF = Serial.parseInt();
@@ -148,6 +144,12 @@ int readMonitorSerie()
     {
       funcionPE = Serial.parseInt();
     }
+    else if (modoF == 3){
+      pasos = Serial.parseInt();
+      Serial.println("Bhasky camina");
+      caminar(pasos);
+    }
+
   }
   return modoF;
 }
@@ -390,14 +392,18 @@ void darLaMano(){
   setAngleParallel(); 
 }
 /****************************************** Caminar ******************************************/
-void caminar(){
+void caminar(int pasos){
   //Salir de posicion estatica
   cleanInputs();
   addInput(RTHIGH,30);
   addInput(RANKLE,80);
   setAngleParallel();
-
-  for(int i=0;i<3;i++){
+  if (pasos < 2){
+    pasos = 2;
+  }else if (pasos > 5){
+    pasos = 5;
+  }
+  for(int i=0;i<pasos;i++){
     //Paso Izq
     cleanInputs();
     addInput(LTHIGH,130);

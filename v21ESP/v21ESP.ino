@@ -25,6 +25,8 @@ void handleRoot() {
       Serial.println("2");
     }
     Serial.println(server.arg(0));
+  } else if (server.argName(0) == "caminar"){
+    Serial.println("3")
   }
   
 }
