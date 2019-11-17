@@ -18,17 +18,16 @@ void handleRoot() {
 
   // Each time something is requested from the client with an argument...
 
-  if ( server.hasArg("angles") || server.hasArg("funcion") ){
+  if ( server.hasArg("angles") || server.hasArg("funcion") || server.hasArg("caminar")){
     if (server.argName(0) == "angles"){
       Serial.println("1");
     } else if (server.argName(0) == "funcion"){
       Serial.println("2");
+    } else if (server.argName(0) == "caminar"){
+      Serial.println("3")
     }
     Serial.println(server.arg(0));
-  } else if (server.argName(0) == "caminar"){
-    Serial.println("3")
   }
-  
 }
 
 void bootstrap()

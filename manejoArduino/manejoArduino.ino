@@ -46,6 +46,7 @@ int lastVal[MAX_SERVOS] = {};
 //Mods
 int funcionPE;
 int modo;
+int pasos;
 
 //Inputs
 int servos[MAX_SERVOS] = {};
@@ -61,16 +62,21 @@ void setup()
   Serial.println("Ingrese :");
   Serial.println("1 SERVO ANGULO");
   Serial.println("2 FUNCION");
-  Serial.println("  1 - Saludar");
-  Serial.println("  2 - Decir que no");
-  Serial.println("  3 - Dar la mano");
-  Serial.println("  4 - Caminar");
-  Serial.println("  5 - Estabilizar");
+  Serial.println("  1 - Estabilizar");
+  Serial.println("  2 - Saludar");
+  Serial.println("  3 - Decir que no");
+  Serial.println("  4 - Dar la mano");
+  Serial.println("  5 - Dab");
+  Serial.println("  6 - Onda");
+  Serial.println("3 CAMINAR");
+  Serial.println("  Pasos del 2 al 5");
+
 
   pwm.begin();
   pwm.setPWMFreq(60); // Analog servos run at ~60 Hz updates
   
   posArray = 0;
+  pasos = 0;
   
   estabilizar();
 }
@@ -81,7 +87,7 @@ void loop()
   modo = readMonitorSerie();
   if (modo == 1)
   {
-    if(posArray != 0 && servos[0]!= -1){
+    if(posArray != 0 && servos[0] != -1){
       setAngleParallel();
       Serial.println("Servo: ");
       Serial.println(servos[0]);
@@ -93,33 +99,38 @@ void loop()
   {
     switch (funcionPE){
       case 1:
+        Serial.println("Bhasky se estabiliza");
+        estabilizar();
+        break;
+      case 2:
         Serial.println("Bhasky saluda");
         saludar();
         break;
-      case 2:
+      case 3:
         Serial.println("Bhasky dice no");
         no();
         break;
-      case 3:
+      case 4:
         Serial.println("Bhasky da la mano");
         darLaMano();
         break;
       case 5:
-        Serial.println("Bhasky se estabiliza");
-        estabilizar();
-        break;
-      case 6:
-        Serial.println("Bhasky festeja a lo Pogba");
+        Serial.println("Bhasky hace el dab");
         dab();
         break;
-      case 7:
+      case 6:
+        break;
         Serial.println("Bhasky hace la onda");
         onda();
-        break;
       default:
         Serial.println("Bhasky no hace nada");
         break;
     }
+  }
+  else if (modo == 3)
+  {
+    Serial.println("Bhasky camina");
+    caminar();
   }
 }
 
@@ -127,7 +138,7 @@ void loop()
 int readMonitorSerie()
 {
   int modoF;
-  int servo, angle,pasos;
+  int servo, angle;
   if (Serial.available())
   {
     modoF = Serial.parseInt();
@@ -146,10 +157,9 @@ int readMonitorSerie()
     }
     else if (modoF == 3){
       pasos = Serial.parseInt();
-      Serial.println("Bhasky camina");
-      caminar(pasos);
+      if (pasos < 2) pasos = 2;
+      else if (pasos > 5) pasos = 5;
     }
-
   }
   return modoF;
 }
@@ -392,17 +402,13 @@ void darLaMano(){
   setAngleParallel(); 
 }
 /****************************************** Caminar ******************************************/
-void caminar(int pasos){
+void caminar(){
   //Salir de posicion estatica
   cleanInputs();
   addInput(RTHIGH,30);
   addInput(RANKLE,80);
   setAngleParallel();
-  if (pasos < 2){
-    pasos = 2;
-  }else if (pasos > 5){
-    pasos = 5;
-  }
+ 
   for(int i=0;i<pasos;i++){
     //Paso Izq
     cleanInputs();
@@ -432,6 +438,7 @@ void caminar(int pasos){
   addInput(LTHIGH,posHome[LTHIGH]);
   addInput(LANKLE,posHome[LANKLE]);
   setAngleParallel();
+  pasos = 0;
 }
 
 /****************************************** Estabilizar ******************************************/

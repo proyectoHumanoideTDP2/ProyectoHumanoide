@@ -25,18 +25,29 @@ const char MAIN_page[] PROGMEM = R"=====(
       justify-content: center;
       display: flex;
     }
-    h1{
+    .caminar-button{
+      justify-content: center;
+      display: block;
+    }
+    .title-text{
       text-align: center;
       display: block;
       color:white;
-      margin-top:15px;
-      letter-spacing: 1ch;
       font-family: 'Times new Roman';
     }
-    h2{
-      color:white;
-      display: block;
+    .title{
+      letter-spacing: 1ch;
       margin-top:15px;
+    }
+    .movimientos{
+      margin-top:15px;
+    }
+    .pasos{
+      margin-right:15px;
+      margin-bottom:5px;
+    }
+    .text-radio{
+      color:white;
       font-family: 'Times new Roman';
       text-align: center;
     }
@@ -53,30 +64,45 @@ const char MAIN_page[] PROGMEM = R"=====(
   </style>
 <body>
     <div class="container page-content">
-      <h1>BHASKY</h1>
+      <h1 class="title title-text">BHASKY</h1>
       <div class="line"></div>
       <div class="row content-function">
-        <h2>Movimientos</h2>
+        <h2 class="title-text movimientos">Movimientos</h2>
         <div class="movimientos-content">
             <form action="" method="get" class="row justify-content-center">
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="1" method="get">Saludar</button> 
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="2" method="get">No</button> 
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="3" method="get">Dar la mano</button>
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="5" method="get">Estabilizar</button> 
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="5" method="get">Dab</button> 
-                <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="5" method="get">Onda</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="1" method="get">Estabilizar</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="2" method="get">Saludar</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="3" method="get">No</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="4" method="get">Dar la mano</button>
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="5" method="get">Dab</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="6" method="get">Onda</button> 
             </form>
         </div>
-        <div class="caminar-content">
-            <form action="" method="get" class="row justify-content-center">
-                    <h2>Caminar</h5>
-                    <select class="form-control" id="exampleFormControlSelect1">
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                    <button class="btn btn-lg btn-light mr-2 mt-2 " name="caminar" type="submit">Caminar</button>
+        <div class="caminar-content row">
+          <form action="" method="get" class="justify-content-center">
+              <h2 class="title-text">Caminar</h2>
+                <div class="row"> 
+                  <h4 class="title-text pasos"> Pasos </h4>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="2pasos"  value='2' name="caminar" checked>
+                    <label class="form-check-label text-radio" for="2pasos"> 2 </label>
+                  </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="3pasos"  value='3' name="caminar">
+                    <label class="form-check-label text-radio" for="3pasos"> 3 </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="4pasos"  value='4' name="caminar">
+                  <label class="form-check-label text-radio" for="4pasos"> 4 </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="5pasos"  value='5' name="caminar">
+                  <label class="form-check-label text-radio" for="5pasos"> 5 </label>
+                </div>
+              </div>
+                <div class="row justify-content-center">
+                    <button class="btn btn-lg btn-light mr-2 mt-2" type="submit">Caminar</button>
+                </div>
             </form>   
         </div>
       </div>
@@ -95,6 +121,4 @@ const char MAIN_page[] PROGMEM = R"=====(
     </div>
 </body>
 </html>
-
-
 )=====";
