@@ -6,26 +6,26 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 /****************************************** Defino constantes ******************************************/
 #define INCR    5     // "angle-step", from current angle to the destination angle
-#define INCRDEL 20 // "time-step", ms delay for each angle-step
+#define INCRDEL 20    // "time-step", ms delay for each angle-step
 #define DELAY_ENTRE_SERVOS 250 
 
 #define HEAD    99  // Head  145/635/25/145/85
-#define RFOOT   0   // Right foot articulation
-#define RSHLDRT 1   // Right shoulder articulation with torso
-#define RSHLDRA 2   // Right shoulder articulation with arm
-#define RELBOW  3   // Right elbow articulation
-#define LSHLDRT 4   // Left shoulder articulation with torso
-#define LSHLDRA 5   // Left shoulder articulation with arm
-#define LELBOW  6   // Left elbow articulation
-#define RHIP    7   // Right hip articulation
-#define LHIP    8   // Left hip articulation
-#define RTHIGH  9   // Right thigh articulation
-#define LTHIGH  10  // Left thigh articulation
-#define RKNEE   11  // Right knee articulation
-#define LKNEE   12  // Left knee articulation
-#define RANKLE  13  // Right ankle articulation
-#define LANKLE  14  // Left ankle articulation
-#define LFOOT   15  // Left foot articulation
+#define LELBOW  0   // Left elbow articulation
+#define LSHLDRA 1   // Left shoulder articulation with arm
+#define LSHLDRT 2   // Left shoulder articulation with torso
+#define LHIP    3   // Left hip articulation
+#define LTHIGH  4   // Left thigh articulation
+#define LKNEE   5   // Left knee articulation
+#define LANKLE  6   // Left ankle articulation
+#define LFOOT   7   // Left foot articulation
+#define RFOOT   8   // Right foot articulation
+#define RANKLE  9   // Right ankle articulation
+#define RKNEE   10  // Right knee articulation
+#define RTHIGH  11  // Right thigh articulation
+#define RHIP    12  // Right hip articulation
+#define RSHLDRT 13  // Right shoulder articulation with torso
+#define RSHLDRA 14  // Right shoulder articulation with arm
+#define RELBOW  15  // Right elbow articulation
 
 
 #define MAX_SERVOS 16
@@ -36,11 +36,11 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // for max range. You'll have to tweak them as necessary to match the servos you
 // have!
 // "Minimum" and "Maximum" pulse lengths for each servo. Indexes correspond to constants above
-int servoMin[] =  {145, 160,  145,  145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145, 145 };
-int servoMax[] =  {635, 630,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640,  640, 635 };
-int anguloMin[] = {60,  65,   5,    70,   5,    15,   80,   60,   80,   5,    75,   50,   85,   70,   35,  60  };
-int anguloMax[] = {100, 175,  150,  80,   110,  160,  90,   75,   100,  75,   145,  75,   110,  120,  85,  100 };
-int posHome[] =   {80,  75,   5,    70,   85,   160,  90,   75,   80,   45,   110,  75,   85,   100,  60,  80  };
+int servoMin[] =  {145, 145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145,  160,  145, 145 };
+int servoMax[] =  {640, 640,  640,  640,  640,  640,  640,  635,  635,  640,  640,  640,  640,  630,  640, 640 };
+int anguloMin[] = { 80,  15,    5,   80,   75,   85,   35,  60 ,  60 ,   70,   50,    5,   60,   65,    5,  70 };
+int anguloMax[] = { 90, 160,   10,  100   145,  110,   85,  100,  100,  120,   75,   75,   75,  175,  150,  80 };
+int posHome[] =   { 90, 160,   85,   80,  110,   85,   60,  80 ,  80 ,  100,   75,   45,   75,   75,    5,  70 };
 //                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14   15
 
 // Last values for each servo/articulation. Needed for "natural movements"
