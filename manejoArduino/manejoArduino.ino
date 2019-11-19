@@ -71,8 +71,9 @@ void setup()
   Serial.println("  4 - Dar la mano");
   Serial.println("  5 - Dab");
   Serial.println("  6 - Onda");
+  Serial.println("  7 - Arigato");
   Serial.println("3 CAMINAR");
-  Serial.println("  Pasos del 2 al 5");
+  Serial.println("  Pasos del 4 al 10");
 
 
   pwm.begin();
@@ -127,8 +128,13 @@ void loop()
         break;
       case 6:
         Serial.println("Bhasky hace la onda");
-        onda();
         estabilizar();
+        onda();
+        break;
+      case 7:
+        Serial.println("Bhasky hace arigato");
+        estabilizar();
+        arigato();
         break;
       default:
         Serial.println("Bhasky no hace nada");
@@ -577,4 +583,42 @@ void onda(){
   addInput(RSHLDRT,posHome[RSHLDRT]);
   addInput(LSHLDRT,posHome[LSHLDRT]);
   setAngleParallel(); 
+}
+
+/****************************************** Arigato ******************************************/
+void arigato(){
+
+cleanInputs();
+addInput(LSHLDRT, 45);
+addInput(RSHLDRT, 120);
+setAngleParallel();
+
+cleanInputs();
+addInput(LSHLDRT, 5);
+addInput(LELBOW, 160);
+addInput(RSHLDRT, 160);
+addInput(RELBOW, 5);
+setAngleParallel();
+
+cleanInputs();
+addInput(LTHIGH, 140);
+addInput(RTHIGH, 15);
+setAngleParallel();
+
+cleanInputs();
+addInput(LTHIGH, posHome[LTHIGH]);
+addInput(RTHIGH, posHome[RTHIGH]);
+setAngleParallel();
+
+cleanInputs();
+addInput(LSHLDRT, 45);
+addInput(LELBOW, posHome[LELBOW]);
+addInput(RSHLDRT, 120);
+addInput(RELBOW, posHome[RELBOW]);
+setAngleParallel();
+
+cleanInputs();
+addInput(LSHLDRT, posHome[LSHLDRT]);
+addInput(RSHLDRT, posHome[RSHLDRT]);
+setAngleParallel();
 }
