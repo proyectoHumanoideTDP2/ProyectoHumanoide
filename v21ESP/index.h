@@ -72,7 +72,7 @@ const char MAIN_page[] PROGMEM = R"=====(
             <form action="" method="get" class="row justify-content-center">
               <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="1" method="get">Estabilizar</button> 
               <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="2" method="get">Saludar</button> 
-              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="3" method="get">No</button> 
+              <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="3" method="get">Enojado</button> 
               <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="4" method="get">Dar la mano</button>
               <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="5" method="get">Dab</button> 
               <button class="btn btn-lg btn-light mr-2 mt-2 col-md-2" type="submit" name="funcion" value="6" method="get">Onda</button> 

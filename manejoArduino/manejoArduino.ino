@@ -316,19 +316,15 @@ void saludar(){
   addInput(RELBOW,5);
   setAngleParallel();
   
-  cleanInputs();
-  addInput(LSHLDRA,25);
-  //addInput(HEAD,30);
-  setAngleParallel();
-/*
-  cleanInputs();
-  //addInput(HEAD,130);
-  setAngleParallel();
-*/
-  cleanInputs();
-  //addInput(HEAD,posHome[HEAD]);
-  addInput(LSHLDRA,70);
-  setAngleParallel();
+  for(int i=0;i<3;i++){
+    cleanInputs();
+    addInput(LSHLDRA,25);
+    setAngleParallel();
+
+    cleanInputs();
+    addInput(LSHLDRA,55);
+    setAngleParallel();
+  }
 
   cleanInputs();
   addInput(LSHLDRA,135);
@@ -354,22 +350,8 @@ void no()
   addInput(LELBOW,150);
   setAngleParallel();
 
- /* cleanInputs();
-  //addInput(HEAD,85);
-  setAngleParallel();
+  delay(2000)
 
-  cleanInputs();
-  //addInput(HEAD,30);
-  setAngleParallel();
-
-  cleanInputs();
- //addInput(HEAD,140);
-  setAngleParallel();
-
-  cleanInputs();
-  //addInput(HEAD,posHome[HEAD]);
-  setAngleParallel();
-*/
   cleanInputs();
   addInput(RELBOW,posHome[RELBOW]);
   addInput(LELBOW,posHome[LELBOW]);
@@ -450,10 +432,6 @@ void estabilizar()
   if (lastVal[0] == 0)
     inicializarLastVal();
 
-  //cleanInputs();
-  //addInput(HEAD,posHome[HEAD]);
-  //setAngleParallel(); 
-
   cleanInputs();
   addInput(RELBOW,posHome[RELBOW]);
   addInput(LELBOW,posHome[LELBOW]);
@@ -509,7 +487,6 @@ void dab(){
   setAngleParallel();
 
   cleanInputs();
-  //addInput(HEAD, 40);
   addInput(RTHIGH, 30);
   addInput(RELBOW, 5);
   setAngleParallel();
@@ -524,7 +501,6 @@ void dab(){
   cleanInputs();
   addInput(RELBOW, posHome[RELBOW]);
   addInput(LSHLDRA, 80);
-  //addInput(HEAD, posHome[HEAD]);
   setAngleParallel();
 
   cleanInputs();
