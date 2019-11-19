@@ -39,7 +39,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 int servoMin[] =  {145, 145,  120,  145,  145,  145,  145,  145,  145,  145,  145,  145,  145,  160,  145, 145 };
 int servoMax[] =  {640, 640,  640,  640,  640,  640,  640,  635,  635,  640,  640,  640,  640,  630,  640, 640 };
 int anguloMin[] = { 80,  15,    5,   80,   75,   85,   35,  60 ,  60 ,   70,   50,    5,   60,   65,    5,  70 };
-int anguloMax[] = { 90, 160,   10,  100,  145,  110,   85,  100,  100,  120,   75,   75,   75,  175,  150,  80 };
+int anguloMax[] = { 90, 160,  110,  100,  145,  110,   85,  100,  100,  120,   75,   75,   75,  175,  150,  80 };
 int posHome[] =   { 90, 160,   85,   80,  110,   85,   60,  80 ,  80 ,  100,   75,   45,   75,   75,    5,  70 };
 //                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14   15
 
@@ -213,7 +213,7 @@ void setAngleParallel()
           lastVal[servos[j]] = i;
         } else {
           lastVal[servos[j]] = angles[j];
-          if (servos[j] > 0 && servos[j] < 7 )
+          if (servos[j] < 3 || servos[j] > 12)
             limitarBrazos();
           servos[j] = -1;
           cantComplet++;
@@ -433,7 +433,7 @@ void caminar(){
     addInput(RFOOT,posHome[RFOOT]);
     setAngleParallel();
   }
-  
+
   cleanInputs();
   addInput(LFOOT,posHome[LFOOT]);
   addInput(RTHIGH,posHome[RTHIGH]);
@@ -537,6 +537,7 @@ void dab(){
 /****************************************** Onda ******************************************/
 void onda(){
   
+  //Sube los brazos
   cleanInputs();
   addInput(RSHLDRA, 90);
   addInput(RSHLDRT, 65);
@@ -553,16 +554,13 @@ void onda(){
   addInput(RELBOW, 70);
   addInput(RSHLDRA, 75);
   addInput(LSHLDRA, 50);
+  addInput(LELBOW, 125);
   setAngleParallel();
 
   cleanInputs();
-  addInput(LELBOW, 90);
   addInput(RSHLDRA, 90);
   addInput(LSHLDRA, 70);
-  setAngleParallel();
-
-  cleanInputs();
-  addInput(LELBOW, 125);
+  addInput(LELBOW, 90);
   addInput(LSHLDRA, 60);
   setAngleParallel();
 
@@ -580,15 +578,11 @@ void onda(){
   addInput(LELBOW, 90);
   addInput(LSHLDRA, 90);
   addInput(RSHLDRA, 105);
+  addInput(RELBOW, 35);
   setAngleParallel();
 
   cleanInputs();
-  addInput(RELBOW, 65);
   addInput(LSHLDRA, 75);
-  addInput(RSHLDRA, 80);
-  setAngleParallel();
-
-  cleanInputs();
   addInput(RELBOW, 70);
   addInput(RSHLDRA, 90);
   setAngleParallel();
@@ -607,6 +601,4 @@ void onda(){
   addInput(RSHLDRT,posHome[RSHLDRT]);
   addInput(LSHLDRT,posHome[LSHLDRT]);
   setAngleParallel(); 
-
-
 }

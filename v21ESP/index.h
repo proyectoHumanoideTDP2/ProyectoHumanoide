@@ -85,19 +85,19 @@ const char MAIN_page[] PROGMEM = R"=====(
                   <h4 class="title-text pasos"> Pasos </h4>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="2pasos"  value='2' name="caminar" checked>
-                    <label class="form-check-label text-radio" for="2pasos"> 2 </label>
+                    <label class="form-check-label text-radio" for="2pasos"> 4 </label>
                   </div>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" id="3pasos"  value='3' name="caminar">
-                    <label class="form-check-label text-radio" for="3pasos"> 3 </label>
+                    <label class="form-check-label text-radio" for="3pasos"> 6 </label>
                 </div>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" id="4pasos"  value='4' name="caminar">
-                  <label class="form-check-label text-radio" for="4pasos"> 4 </label>
+                  <label class="form-check-label text-radio" for="4pasos"> 8 </label>
                 </div>
                 <div class="form-check form-check-inline">
                   <input class="form-check-input" type="radio" id="5pasos"  value='5' name="caminar">
-                  <label class="form-check-label text-radio" for="5pasos"> 5 </label>
+                  <label class="form-check-label text-radio" for="5pasos"> 10 </label>
                 </div>
               </div>
                 <div class="row justify-content-center">
