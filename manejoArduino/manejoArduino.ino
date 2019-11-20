@@ -41,7 +41,7 @@ int servoMax[] =  {640, 640,  640,  640,  640,  640,  640,  635,  635,  640,  64
 int anguloMin[] = { 80,  15,    5,   80,   75,   85,   35,  60 ,  60 ,   70,   50,    5,   60,   65,    5,  70 };
 int anguloMax[] = { 90, 160,  110,  100,  145,  110,   85,  100,  100,  120,   75,   75,   75,  175,  150,  80 };
 int posHome[] =   { 90, 160,   85,   80,  110,   85,   60,  80 ,  80 ,  100,   75,   45,   75,   75,    5,  70 };
-//                 00   01    02    03    04    05    06    07    08    09    10    11    12    13    14   15
+//                 00   01     02    03    04    05    06    07    08    09    10    11    12    13    14   15
 
 // Last values for each servo/articulation. Needed for "natural movements"
 int lastVal[MAX_SERVOS] = {};
@@ -72,6 +72,7 @@ void setup()
   Serial.println("  5 - Dab");
   Serial.println("  6 - Onda");
   Serial.println("  7 - Arigato");
+  Serial.println("  8 - Chuchuwa");
   Serial.println("3 CAMINAR");
   Serial.println("  Pasos del 4 al 10");
 
@@ -136,6 +137,10 @@ void loop()
         estabilizar();
         arigato();
         break;
+      case 8:
+        Serial.println("Bhasky hace chuchuwa");
+        estabilizar();
+        chuchuwa();
       default:
         Serial.println("Bhasky no hace nada");
         break;
@@ -356,7 +361,7 @@ void no()
   addInput(LELBOW,150);
   setAngleParallel();
 
-  delay(2000)
+  delay(2000);
 
   cleanInputs();
   addInput(RELBOW,posHome[RELBOW]);
@@ -541,23 +546,11 @@ void onda(){
 
   cleanInputs();
   addInput(RSHLDRA, 90);
-  addInput(LSHLDRA, 70);
-  addInput(LELBOW, 90);
   addInput(LSHLDRA, 60);
-  setAngleParallel();
-
-  cleanInputs();
-  addInput(LELBOW, 90);
-  addInput(LSHLDRA, 75);
   setAngleParallel();
 
   cleanInputs();
   addInput(LELBOW, 125);
-  addInput(LSHLDRA, 60);
-  setAngleParallel();
-  
-  cleanInputs();
-  addInput(LELBOW, 90);
   addInput(LSHLDRA, 90);
   addInput(RSHLDRA, 105);
   addInput(RELBOW, 35);
@@ -600,9 +593,21 @@ addInput(RSHLDRT, 160);
 addInput(RELBOW, 5);
 setAngleParallel();
 
+anguloMax();
+addInput(LTHIGH, 125);
+addInput(RTHIGH, 30);
+setAngleParallel();
+
 cleanInputs();
-addInput(LTHIGH, 140);
-addInput(RTHIGH, 15);
+addInput(LTHIGH, 135);
+addInput(RTHIGH, 20);
+setAngleParallel();
+
+delay(1000);
+
+anguloMax();
+addInput(LTHIGH, 125);
+addInput(RTHIGH, 30);
 setAngleParallel();
 
 cleanInputs();
@@ -621,4 +626,46 @@ cleanInputs();
 addInput(LSHLDRT, posHome[LSHLDRT]);
 addInput(RSHLDRT, posHome[RSHLDRT]);
 setAngleParallel();
+}
+
+/****************************************** Chuchuwa ******************************************/
+void chuchuwa(){
+
+  cleanInputs();
+  addInput(LSHLDRT, 15);
+  addInput(RSHLDRT, 150);
+  addInput(RELBOW, 65);
+  addInput(LELBOW, 95);
+  setAngleParallel();
+
+  for(int i=0;i<3;i++){
+    cleanInputs();
+    addInput(LSHLDRT, 5);
+    addInput(RTHIGH, 35);
+    addInput(LTHIGH, posHome[LTHIGH]);
+    addInput(RSHLDRT, 140);
+    setAngleParallel();
+
+    cleanInputs();
+    addInput(LSHLDRT, 25);
+    addInput(LTHIGH, 120);
+    addInput(RTHIGH, posHome[RTHIGH]);
+    addInput(RSHLDRT, 170);
+    setAngleParallel();
+  }
+
+  cleanInputs();
+  addInput(LTHIGH, posHome[LTHIGH]);
+  addInput(RTHIGH, posHome[RTHIGH]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LELBOW, posHome[LELBOW]);
+  addInput(RELBOW, posHome[RELBOW]);
+  setAngleParallel();
+
+  cleanInputs();
+  addInput(LSHLDRT, posHome[LSHLDRT]);
+  addInput(RSHLDRT, posHome[RSHLDRT]);
+  setAngleParallel();
 }
