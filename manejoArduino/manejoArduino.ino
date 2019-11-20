@@ -73,6 +73,7 @@ void setup()
   Serial.println("  6 - Onda");
   Serial.println("  7 - Arigato");
   Serial.println("  8 - Chuchuwa");
+  Serial.println("  9 - Sentadillas");
   Serial.println("3 CAMINAR");
   Serial.println("  Pasos del 4 al 10");
 
@@ -141,6 +142,12 @@ void loop()
         Serial.println("Bhasky hace chuchuwa");
         estabilizar();
         chuchuwa();
+        break;
+      case 9:
+        Serial.println("Bhasky hace sentadillas");
+        estabilizar();
+        sentadilla();
+        break;
       default:
         Serial.println("Bhasky no hace nada");
         break;
@@ -535,31 +542,21 @@ void onda(){
   cleanInputs();
   addInput(RELBOW, 35);
   addInput(RSHLDRA, 110);
+  addInput(LSHLDRA, 85);
   setAngleParallel();
 
   cleanInputs();
   addInput(RELBOW, 70);
-  addInput(RSHLDRA, 75);
+  addInput(RSHLDRA, 65);
   addInput(LSHLDRA, 50);
   addInput(LELBOW, 125);
   setAngleParallel();
 
   cleanInputs();
-  addInput(RSHLDRA, 90);
-  addInput(LSHLDRA, 60);
-  setAngleParallel();
-
-  cleanInputs();
-  addInput(LELBOW, 125);
-  addInput(LSHLDRA, 90);
-  addInput(RSHLDRA, 105);
+  addInput(LELBOW, 90);
+  addInput(LSHLDRA, 85);
+  addInput(RSHLDRA, 110);
   addInput(RELBOW, 35);
-  setAngleParallel();
-
-  cleanInputs();
-  addInput(LSHLDRA, 75);
-  addInput(RELBOW, 70);
-  addInput(RSHLDRA, 90);
   setAngleParallel();
 
   cleanInputs();
@@ -581,51 +578,41 @@ void onda(){
 /****************************************** Arigato ******************************************/
 void arigato(){
 
-cleanInputs();
-addInput(LSHLDRT, 45);
-addInput(RSHLDRT, 120);
-setAngleParallel();
+  cleanInputs();
+  addInput(LSHLDRT, 45);
+  addInput(RSHLDRT, 120);
+  setAngleParallel();
 
-cleanInputs();
-addInput(LSHLDRT, 5);
-addInput(LELBOW, 160);
-addInput(RSHLDRT, 160);
-addInput(RELBOW, 5);
-setAngleParallel();
+  cleanInputs();
+  addInput(LSHLDRT, 5);
+  addInput(LELBOW, 160);
+  addInput(RSHLDRT, 160);
+  addInput(RELBOW, 5);
+  setAngleParallel();
 
-anguloMax();
-addInput(LTHIGH, 125);
-addInput(RTHIGH, 30);
-setAngleParallel();
+  cleanInputs();
+  addInput(LTHIGH, 125);
+  addInput(RTHIGH, 30);
+  setAngleParallel();
 
-cleanInputs();
-addInput(LTHIGH, 135);
-addInput(RTHIGH, 20);
-setAngleParallel();
+  delay(1000);
 
-delay(1000);
+  cleanInputs();
+  addInput(LTHIGH, posHome[LTHIGH]);
+  addInput(RTHIGH, posHome[RTHIGH]);
+  setAngleParallel();
 
-anguloMax();
-addInput(LTHIGH, 125);
-addInput(RTHIGH, 30);
-setAngleParallel();
+  cleanInputs();
+  addInput(LSHLDRT, 45);
+  addInput(LELBOW, posHome[LELBOW]);
+  addInput(RSHLDRT, 120);
+  addInput(RELBOW, posHome[RELBOW]);
+  setAngleParallel();
 
-cleanInputs();
-addInput(LTHIGH, posHome[LTHIGH]);
-addInput(RTHIGH, posHome[RTHIGH]);
-setAngleParallel();
-
-cleanInputs();
-addInput(LSHLDRT, 45);
-addInput(LELBOW, posHome[LELBOW]);
-addInput(RSHLDRT, 120);
-addInput(RELBOW, posHome[RELBOW]);
-setAngleParallel();
-
-cleanInputs();
-addInput(LSHLDRT, posHome[LSHLDRT]);
-addInput(RSHLDRT, posHome[RSHLDRT]);
-setAngleParallel();
+  cleanInputs();
+  addInput(LSHLDRT, posHome[LSHLDRT]);
+  addInput(RSHLDRT, posHome[RSHLDRT]);
+  setAngleParallel();
 }
 
 /****************************************** Chuchuwa ******************************************/
@@ -667,5 +654,43 @@ void chuchuwa(){
   cleanInputs();
   addInput(LSHLDRT, posHome[LSHLDRT]);
   addInput(RSHLDRT, posHome[RSHLDRT]);
+  setAngleParallel();
+}
+
+/****************************************** Sentadilla ******************************************/
+void sentadilla(){
+  
+  cleanInputs();
+  addInput(LSHLDRT, 15);
+  addInput(RSHLDRT, 155);
+  addInput(RELBOW, 65);
+  addInput(LELBOW, 95);
+  setAngleParallel();
+
+  for(int i=0;i<3;i++){
+    cleanInputs();
+    addInput(RTHIGH, 5);
+    addInput(LTHIGH, 145);
+    addInput(LKNEE, 110);
+    addInput(RKNEE, 50);
+    addInput(LANKLE, 45);
+    addInput(RANKLE, 110);
+    setAngleParallel();
+
+    cleanInputs();
+    addInput(LKNEE, posHome[LKNEE]);
+    addInput(RKNEE, posHome[RKNEE]);
+    addInput(LTHIGH, posHome[LTHIGH]);
+    addInput(RTHIGH, posHome[RTHIGH]);
+    addInput(LANKLE, posHome[LANKLE]);
+    addInput(RANKLE, posHome[RANKLE]);
+    setAngleParallel();
+  }
+  
+  cleanInputs();
+  addInput(LSHLDRT, posHome[LSHLDRT]);
+  addInput(RSHLDRT, posHome[RSHLDRT]);
+  addInput(RELBOW, posHome[RELBOW]);
+  addInput(LELBOW, posHome[LELBOW]);
   setAngleParallel();
 }
