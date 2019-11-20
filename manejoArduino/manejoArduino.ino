@@ -416,7 +416,7 @@ void caminar(){
     //Paso Izquierdo
     cleanInputs();
     addInput(RTHIGH,posHome[RTHIGH]);
-    addInput(LTHIGH, 145);
+    addInput(LTHIGH, 135);
     addInput(LANKLE, 85);
     addInput(RANKLE, 120);
     addInput(RFOOT, 90);
@@ -426,7 +426,7 @@ void caminar(){
     //Paso Derecho
     cleanInputs();
     addInput(LTHIGH,posHome[LTHIGH]);
-    addInput(RTHIGH, 5);
+    addInput(RTHIGH, 15);
     addInput(LANKLE, 35);
     addInput(RANKLE, 80);
     addInput(LFOOT, 75);
@@ -663,8 +663,6 @@ void sentadilla(){
   cleanInputs();
   addInput(LSHLDRT, 15);
   addInput(RSHLDRT, 155);
-  addInput(RELBOW, 65);
-  addInput(LELBOW, 95);
   setAngleParallel();
 
   for(int i=0;i<3;i++){
