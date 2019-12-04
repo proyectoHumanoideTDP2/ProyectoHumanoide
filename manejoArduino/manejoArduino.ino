@@ -75,8 +75,10 @@ void setup()
   Serial.println("  8 - Chuchuwa");
   Serial.println("  9 - Sentadillas");
   Serial.println("3 CAMINAR");
-  Serial.println("  Pasos del 4 al 10");
-
+  Serial.println("  2 - 4 pasos");
+  Serial.println("  3 - 6 pasos");
+  Serial.println("  4 - 8 pasos");
+  Serial.println("  5 - 10 pasos");
 
   pwm.begin();
   pwm.setPWMFreq(60); // Analog servos run at ~60 Hz updates
@@ -271,7 +273,6 @@ void inicializarLastVal(){
   for(int i=0;i<MAX_SERVOS;i++){
     lastVal[i] = posHome[i] - 1;
   }
-  Serial.println("Se Inicializo LastVal");
 }
 
 /****************************************** Limitar Brazos ******************************************/

@@ -4,7 +4,7 @@
 
 //AP SSID and Password
 const char *ssid = "Bhasky";
-const char *password = "123qweasd";
+const char *password = "12345678";
  
 ESP8266WebServer server(80); //Web server
 
@@ -13,10 +13,7 @@ ESP8266WebServer server(80); //Web server
 //=======================================================================
 void handleRoot() {
   String s = MAIN_page; 
-  
   server.send(200, "text/html", s);   //Send index(html)
-
-  // Each time something is requested from the client with an argument...
 
   if ( server.hasArg("angles") || server.hasArg("funcion") || server.hasArg("caminar")){
     if (server.argName(0) == "angles"){
@@ -52,12 +49,10 @@ void setup(void)
   WiFi.softAPConfig(Ip, Ip, NMask);
   
   server.on("/", handleRoot);     //GET / ==> run handleRoot()
-  server.begin();                 //Start web server
   server.on("/bootstrap.min.css", bootstrap);
-  server.on("bootstrap.min.css", bootstrap);
-
 
   SPIFFS.begin(); 
+  server.begin();                 //Start web server
 }
 //===============================================================
 //                     Loop
